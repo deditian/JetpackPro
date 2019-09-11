@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.annotation.Nullable
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,7 @@ class TvShowFragment : Fragment() {
     private var academyAdapter: TvShowAdapter? = null
 
     private var viewModel: TvShowViewModel? = null
-    private var modelList: List<MovieCatalogue>? = null
+    private var modelList: MutableLiveData<ArrayList<MovieCatalogue>>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,13 +41,15 @@ class TvShowFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (activity != null) {
-
-            viewModel = ViewModelProviders.of(this).get(TvShowViewModel::class.java)
+            //untuk handle jika repository lebih dari 1
+            val factory = TvShowViewModel.Factory()
+            //end
+            viewModel = ViewModelProviders.of(this,factory).get(TvShowViewModel::class.java)
             modelList = viewModel?.getTvShow()
 
             academyAdapter = TvShowAdapter(activity!!)
             academyAdapter?.setListTvShow(DataDummy.generateTvShows())
-            Log.i("isinya","apa tuh : "+ DataDummy.generateTvShows())
+            Log.i("isinya", "apa tuh : " + DataDummy.generateTvShows())
             rvCourse?.layoutManager = LinearLayoutManager(context)
             rvCourse?.setHasFixedSize(true)
             rvCourse?.adapter = academyAdapter

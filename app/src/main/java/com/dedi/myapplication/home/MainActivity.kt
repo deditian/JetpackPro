@@ -2,13 +2,12 @@ package com.dedi.myapplication.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.viewpager.widget.ViewPager
 import com.dedi.myapplication.R
 import com.dedi.myapplication.adapter.ViewPagerAdapter
 import com.dedi.myapplication.movie.MovieFragment
 import com.dedi.myapplication.tvshow.TvShowFragment
-import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,10 +17,10 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(MovieFragment(), "Movies")
-        adapter.addFragment(TvShowFragment(), "Tv Shows")
-
+        val adapter = ViewPagerAdapter(supportFragmentManager).apply {
+            addFragment(MovieFragment(), "Movies")
+            addFragment(TvShowFragment(), "Tv Shows")
+        }
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
     }

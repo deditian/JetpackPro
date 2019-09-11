@@ -1,37 +1,63 @@
 package com.dedi.myapplication.movie
 
 import com.dedi.myapplication.data.MovieCatalogue
-import org.junit.After
-import org.junit.Assert.*
+
 import org.junit.Before
 import org.junit.Test
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.dedi.myapplication.repository.MovieRepository
+import com.dedi.myapplication.utils.DataDummy
+import org.junit.Rule
+import org.mockito.Mock
+import org.mockito.Mockito.*
+import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
+
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+
+class MoviesViewModelTest {
+    private var viewModel: MoviesViewModel? = null
+    private val movieRepository = mock(MoviesViewModel::class.java)
 
 
 
-class MoviesViewModelTest{
-    private var testMovie: MoviesViewModel? = null
-    private var movie: MovieCatalogue? = null
+    @Mock
+    private lateinit var remote : MovieRepository
+
+    @Mock
+    private lateinit var viewmodel : MoviesViewModel
 
     @Before
     fun setUp() {
-        testMovie = MoviesViewModel()
-        movie = MovieCatalogue(
-            "m01",
-            "A Star Is Born",
-            "Seasoned musician Jackson Maine discovers — and falls in love with — struggling artist Ally. She has just about given up on her dream to make it big as a singer — until Jack coaxes her into the spotlight. But even as Ally's career takes off, the personal side of their relationship is breaking down, as Jack fights an ongoing battle with his own internal demons.",
-            "moviesimage/poster_a_start_is_born.jpg"
-        )
+        MockitoAnnotations.initMocks(this)
+        viewModel = MoviesViewModel(movieRepository)
     }
 
-    @After
-    fun tearDown() {
-    }
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
 
     @Test
-    fun movieTest() {
-        assertEquals(movie?.courseId, testMovie?.getMovies()?.get(0)?.courseId)
-        assertEquals(movie?.title, testMovie?.getMovies()?.get(0)?.title)
-        assertEquals(movie?.overview, testMovie?.getMovies()?.get(0)?.overview)
-        assertEquals(movie?.imagePath, testMovie?.getMovies()?.get(0)?.imagePath)
+    fun getMovies() {
+        val expected = generateDummy()
+
+
+        Mockito.`when`(movieRepository.getMovies()).thenReturn(expected)
+
+//        verify(remote).getAllMovie()
+//        assertNotNull(viewmodel.getMovies().value)
+        assertNotNull(expected.value)
+//        assertEquals(expected.value, viewmodel.getMovies().value)
+
+    }
+
+    fun generateDummy(): MutableLiveData<ArrayList<MovieCatalogue>> {
+        val data = MutableLiveData<ArrayList<MovieCatalogue>>()
+        data.postValue(DataDummy.generateMovies())
+        return data
     }
 }
+

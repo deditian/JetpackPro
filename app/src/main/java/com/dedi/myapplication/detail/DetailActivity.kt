@@ -2,30 +2,18 @@ package com.dedi.myapplication.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders
-import com.bumptech.glide.Glide
+import androidx.appcompat.app.AppCompatActivity
 import com.dedi.myapplication.R
 import com.dedi.myapplication.data.MovieCatalogue
-import com.dedi.myapplication.tvshow.TvShowViewModel
-import com.dedi.myapplication.utils.DataDummy
 import com.dedi.myapplication.utils.imageLoad
-
-import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_detail.toolbar
 import kotlinx.android.synthetic.main.content_detail.*
-import kotlinx.android.synthetic.main.item_content.*
-import kotlinx.android.synthetic.main.item_content.view.*
-import java.nio.file.Files.size
-
 
 
 
 class DetailActivity : AppCompatActivity() {
 
-    private val  result by lazy {
+    private val result by lazy {
         intent.getParcelableExtra<MovieCatalogue>("movies")
     }
 
