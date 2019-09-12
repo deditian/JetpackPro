@@ -3,24 +3,20 @@ package com.dedi.myapplication.movie
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.dedi.myapplication.R
-
-
-import com.dedi.myapplication.data.MovieCatalogue
-import com.dedi.myapplication.utils.DataDummy
-import androidx.recyclerview.widget.RecyclerView
-
-import com.dedi.myapplication.adapter.MoviesAdapter
 import androidx.annotation.Nullable
-import androidx.lifecycle.LiveData
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
-
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.dedi.myapplication.R
+import com.dedi.myapplication.adapter.MoviesAdapter
+import com.dedi.myapplication.data.MovieCatalogue
+import com.dedi.myapplication.repository.MovieRepository
+import com.dedi.myapplication.utils.DataDummy
 
 class MovieFragment : Fragment() {
 
@@ -28,7 +24,6 @@ class MovieFragment : Fragment() {
     private var academyAdapter: MoviesAdapter? = null
     private var viewModel: MoviesViewModel? = null
     private var modelList: MutableLiveData<ArrayList<MovieCatalogue>>? = null
-
 
 
     override fun onCreateView(
@@ -44,10 +39,10 @@ class MovieFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         if (activity != null) {
             //untuk handle jika repository lebih dari 1
-            val factory = MoviesViewModel.Factory(activity!!.application)
+            val factory = MoviesViewModel.Factory(activity!!.application, MovieRepository())
             //end
 
-            viewModel = ViewModelProviders.of(this,factory).get(MoviesViewModel::class.java)
+            viewModel = ViewModelProviders.of(this, factory).get(MoviesViewModel::class.java)
             modelList = viewModel?.getMovies()
 
             academyAdapter = MoviesAdapter(activity!!)
@@ -64,9 +59,6 @@ class MovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         rvCourse = view.findViewById<View>(R.id.rv_movies) as RecyclerView?
     }
-
-
-
 
 
 }

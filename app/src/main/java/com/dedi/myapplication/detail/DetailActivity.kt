@@ -6,9 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dedi.myapplication.R
 import com.dedi.myapplication.data.MovieCatalogue
 import com.dedi.myapplication.utils.imageLoad
-import kotlinx.android.synthetic.main.activity_detail.toolbar
+import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.content_detail.*
-
 
 
 class DetailActivity : AppCompatActivity() {

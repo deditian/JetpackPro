@@ -6,12 +6,10 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.rule.ActivityTestRule
 import com.dedi.myapplication.R
-import com.dedi.myapplication.movie.MovieFragment
 import com.dedi.myapplication.testing.SingleFragmentActivity
 import com.dedi.myapplication.utils.EspressoIdlingResource
 import com.dedi.myapplication.utils.RecyclerViewItemCountAssertion
 import org.junit.After
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

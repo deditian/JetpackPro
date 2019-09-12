@@ -1,11 +1,12 @@
-package com.dedi.myapplication.movie
+package com.dedi.myapplication.tvshow
+
 
 import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.dedi.myapplication.data.MovieCatalogue
-import com.dedi.myapplication.repository.MovieRepository
+import com.dedi.myapplication.repository.TvShowRepository
 import com.dedi.myapplication.utils.DataDummy
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -19,44 +20,43 @@ import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 
 
-class MoviesViewModelTest {
+class TvShowViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val movieRepository = mock(MovieRepository::class.java)
+    private val tvShowRepository = mock(TvShowRepository::class.java)
     private val application = mock(Application::class.java)
 
     @Mock
     lateinit var observer: Observer<ArrayList<MovieCatalogue>>
 
     @Mock
-    private lateinit var viewmodel: MoviesViewModel
+    private lateinit var viewmodel: TvShowViewModel
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        viewmodel = MoviesViewModel(application, movieRepository)
+        viewmodel = TvShowViewModel(application, tvShowRepository)
     }
 
 
     @Test
-    fun getMovies() {
+    fun getTvShows() {
         val expected = generateDummy()
 
-        Mockito.`when`(movieRepository.getAllMovie()).thenReturn(expected)
-        viewmodel.getMovies().observeForever(observer)
+        Mockito.`when`(tvShowRepository.getAllTvShow()).thenReturn(expected)
+        viewmodel.getTvShow().observeForever(observer)
         verify(observer).onChanged(expected.value)
 
-        assertNotNull(viewmodel.getMovies().value)
+        assertNotNull(viewmodel.getTvShow().value)
         assertNotNull(expected.value)
-        assertEquals(expected.value, viewmodel.getMovies().value)
+        assertEquals(expected.value, viewmodel.getTvShow().value)
 
     }
 
     fun generateDummy(): MutableLiveData<ArrayList<MovieCatalogue>> {
         val data = MutableLiveData<ArrayList<MovieCatalogue>>()
-        data.postValue(DataDummy.generateMovies())
+        data.postValue(DataDummy.generateTvShows())
         return data
     }
 }
-

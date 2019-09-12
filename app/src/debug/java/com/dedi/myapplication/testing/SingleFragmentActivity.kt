@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.dedi.myapplication.R
 
 
-class SingleFragmentActivity  : AppCompatActivity() {
+class SingleFragmentActivity : AppCompatActivity() {
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

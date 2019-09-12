@@ -8,17 +8,17 @@ import com.dedi.myapplication.data.MovieCatalogue
 import com.dedi.myapplication.repository.MovieRepository
 
 
-class MoviesViewModel(application: Application) : ViewModel() {
+class MoviesViewModel(applicationr: Application, movieRepository: MovieRepository) : ViewModel() {
 
-    constructor(movieRepository: MoviesViewModel?) : this(Application())
 
     fun getMovies(): MutableLiveData<ArrayList<MovieCatalogue>> {
         return MovieRepository?.getIntance().getAllMovie()
     }
 
-    class Factory(private val application: Application) : ViewModelProvider.NewInstanceFactory() {
+    class Factory(private val application: Application, private val movieRepository: MovieRepository) :
+        ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MoviesViewModel(application) as T
+            return MoviesViewModel(application, movieRepository) as T
         }
     }
 }

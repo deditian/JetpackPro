@@ -3,7 +3,6 @@ package com.dedi.myapplication.utils
 import android.os.Parcelable
 import com.dedi.myapplication.data.MovieCatalogue
 import kotlinx.android.parcel.Parcelize
-import java.nio.file.Files.size
 
 @Parcelize
 object DataDummy : Parcelable {

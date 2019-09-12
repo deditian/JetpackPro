@@ -2,11 +2,15 @@ package com.dedi.myapplication.home
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.dedi.myapplication.R
 import com.dedi.myapplication.utils.EspressoIdlingResource
@@ -32,8 +36,17 @@ class MainActivityTest {
     }
 
     @Test
-    fun toReaderActivityTest() {
+    fun MoviesToTvShows() {
         onView(withId(R.id.rv_movies)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
+        pressBack()
+        onView(withId(R.id.viewPager)).perform(ViewActions.swipeLeft())
+
+        onView(withId(R.id.rv_tv_show)).perform(
             RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
                 0,
                 click()
@@ -41,4 +54,5 @@ class MainActivityTest {
         )
 
     }
+
 }

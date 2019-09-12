@@ -1,7 +1,7 @@
 package com.dedi.myapplication.home
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.dedi.myapplication.R
 import com.dedi.myapplication.adapter.ViewPagerAdapter
 import com.dedi.myapplication.movie.MovieFragment

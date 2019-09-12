@@ -3,22 +3,20 @@ package com.dedi.myapplication.tvshow
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.annotation.Nullable
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.dedi.myapplication.R
-import com.dedi.myapplication.adapter.MoviesAdapter
 import com.dedi.myapplication.adapter.TvShowAdapter
 import com.dedi.myapplication.data.MovieCatalogue
-import com.dedi.myapplication.movie.MoviesViewModel
+import com.dedi.myapplication.repository.TvShowRepository
 import com.dedi.myapplication.utils.DataDummy
 
 class TvShowFragment : Fragment() {
@@ -42,9 +40,9 @@ class TvShowFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         if (activity != null) {
             //untuk handle jika repository lebih dari 1
-            val factory = TvShowViewModel.Factory()
+            val factory = TvShowViewModel.Factory(activity!!.application, TvShowRepository())
             //end
-            viewModel = ViewModelProviders.of(this,factory).get(TvShowViewModel::class.java)
+            viewModel = ViewModelProviders.of(this, factory).get(TvShowViewModel::class.java)
             modelList = viewModel?.getTvShow()
 
             academyAdapter = TvShowAdapter(activity!!)

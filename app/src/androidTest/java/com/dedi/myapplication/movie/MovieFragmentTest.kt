@@ -11,7 +11,6 @@ import com.dedi.myapplication.testing.SingleFragmentActivity
 import com.dedi.myapplication.utils.EspressoIdlingResource
 import com.dedi.myapplication.utils.RecyclerViewItemCountAssertion
 import org.junit.After
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

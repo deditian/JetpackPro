@@ -1,21 +1,16 @@
 package com.dedi.myapplication.adapter
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.dedi.myapplication.R
 import com.dedi.myapplication.data.MovieCatalogue
 import com.dedi.myapplication.detail.DetailActivity
 import com.dedi.myapplication.utils.imageLoad
 import kotlinx.android.synthetic.main.item_content.view.*
-import java.lang.Exception
 
 class MoviesAdapter(activity: FragmentActivity) : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
     private val mCourses = ArrayList<MovieCatalogue>()
