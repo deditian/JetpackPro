@@ -20,7 +20,7 @@ class SingleFragmentActivity : AppCompatActivity() {
             Gravity.CENTER
         )
         content.layoutParams = params
-        content.id = R.id.viewPager
+//        content.id = R.id.viewPager
 
         setContentView(content)
     }
@@ -28,14 +28,14 @@ class SingleFragmentActivity : AppCompatActivity() {
     fun setFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.viewPager, fragment, "TEST")
+//            .add(R.id.viewPager, fragment, "TEST")
             .commit()
     }
 
     fun replaceFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.viewPager, fragment)
+//            .add(R.id.viewPager, fragment)
             .commit()
     }
 }

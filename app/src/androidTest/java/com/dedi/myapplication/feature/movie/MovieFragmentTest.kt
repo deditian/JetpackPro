@@ -1,4 +1,4 @@
-package com.dedi.myapplication.movie
+package com.dedi.myapplication.feature.movie
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry

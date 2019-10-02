@@ -1,32 +1,29 @@
-package com.dedi.myapplication.tvshow
+package com.dedi.myapplication.feature.tvshow
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dedi.myapplication.R
 import com.dedi.myapplication.adapter.TvShowAdapter
-import com.dedi.myapplication.data.MovieCatalogue
-import com.dedi.myapplication.repository.TvShowRepository
-import com.dedi.myapplication.utils.DataDummy
+import com.dedi.myapplication.repository.ApiRepository
+
 
 class TvShowFragment : Fragment() {
 
     private var rvCourse: RecyclerView? = null
     private var progressBar: ProgressBar? = null
+    lateinit var viewModel: TvShowViewModel
     private var academyAdapter: TvShowAdapter? = null
 
-    private var viewModel: TvShowViewModel? = null
-    private var modelList: MutableLiveData<ArrayList<MovieCatalogue>>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,20 +35,33 @@ class TvShowFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.title = "Tv Shows"
         if (activity != null) {
             //untuk handle jika repository lebih dari 1
-            val factory = TvShowViewModel.Factory(activity!!.application, TvShowRepository())
-            //end
+            val factory = TvShowViewModel.Factory(activity!!.application, ApiRepository())
+//            //end
             viewModel = ViewModelProviders.of(this, factory).get(TvShowViewModel::class.java)
-            modelList = viewModel?.getTvShow()
-
+            observeViewModelRequest(viewModel)
             academyAdapter = TvShowAdapter(activity!!)
-            academyAdapter?.setListTvShow(DataDummy.generateTvShows())
-            Log.i("isinya", "apa tuh : " + DataDummy.generateTvShows())
+
             rvCourse?.layoutManager = LinearLayoutManager(context)
             rvCourse?.setHasFixedSize(true)
             rvCourse?.adapter = academyAdapter
         }
+    }
+
+    private fun observeViewModelRequest(viewModel: TvShowViewModel) {
+        // Update the list when the data changes
+        viewModel.getTvShow().observe(this, Observer {data ->
+//            progressBar.visibility =View.GONE
+            if (data != null){
+                academyAdapter?.setListTvShow(data.results)
+                academyAdapter?.notifyDataSetChanged()
+            }else{
+
+            }
+
+        })
     }
 
 

@@ -1,4 +1,4 @@
-package com.dedi.myapplication.tvshow
+package com.dedi.myapplication.feature.tvshow
 
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingRegistry

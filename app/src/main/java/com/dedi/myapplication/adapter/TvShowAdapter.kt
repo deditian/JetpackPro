@@ -7,13 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.dedi.myapplication.R
-import com.dedi.myapplication.data.MovieCatalogue
+import com.dedi.myapplication.data.DetailModel
+import com.dedi.myapplication.data.entity.TvShow
+
 import com.dedi.myapplication.detail.DetailActivity
 import com.dedi.myapplication.utils.imageLoad
 import kotlinx.android.synthetic.main.item_content.view.*
 
 class TvShowAdapter(activity: FragmentActivity) : RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder>() {
-    private val mCourses = ArrayList<MovieCatalogue>()
+    private val mCourses = ArrayList<TvShow>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TvShowViewHolder {
         return TvShowViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false))
     }
@@ -26,7 +28,7 @@ class TvShowAdapter(activity: FragmentActivity) : RecyclerView.Adapter<TvShowAda
         holder.bind(mCourses[position])
     }
 
-    fun setListTvShow(listCourses: List<MovieCatalogue>?) {
+    fun setListTvShow(listCourses: List<TvShow>) {
         if (listCourses == null) return
         this.mCourses.clear()
         this.mCourses.addAll(listCourses)
@@ -34,12 +36,14 @@ class TvShowAdapter(activity: FragmentActivity) : RecyclerView.Adapter<TvShowAda
 
 
     inner class TvShowViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(results: MovieCatalogue) = itemView.run {
-            img_poster.imageLoad(results.imagePath.toString())
-            txt_title.text = results.title
+        fun bind(results: TvShow) = itemView.run {
+            img_poster.imageLoad(results.poster_path)
+            txt_title.text = results.original_name
             setOnClickListener {
                 val mIntent = Intent(context, DetailActivity::class.java).apply {
-                    putExtra("movies", results)
+                    putExtra("movies",
+                        DetailModel(results.id,results.original_name,results.poster_path,results.overview)
+                    )
                 }
                 context.startActivity(mIntent)
             }
