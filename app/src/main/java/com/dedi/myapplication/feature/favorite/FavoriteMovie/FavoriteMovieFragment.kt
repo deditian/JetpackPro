@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dedi.myapplication.R
-import com.dedi.myapplication.adapter.MoviesAdapter
-import com.dedi.myapplication.adapter.ViewPagerAdapter
+import com.dedi.myapplication.ViewModelFactory
 import com.dedi.myapplication.feature.movie.MoviesViewModel
 import com.dedi.myapplication.repository.ApiRepository
 import kotlinx.android.synthetic.main.fragment_movie.*
@@ -36,11 +36,10 @@ class FavoriteMovieFragment : Fragment() {
 
         if (activity != null) {
             //untuk handle jika repository lebih dari 1
-            val factory = FavoriteMovieViewModel.Factory(activity!!.application, ApiRepository())
+            viewModel = obtainViewModel(activity as FragmentActivity)
             //end
             progressBar.visibility =View.VISIBLE
 
-            viewModel = ViewModelProviders.of(this, factory).get(FavoriteMovieViewModel::class.java)
             observeViewModelRequest(viewModel)
             academyAdapter = FavoriteMovieAdapter(activity!!)
 
@@ -58,8 +57,6 @@ class FavoriteMovieFragment : Fragment() {
             if (data != null){
                 academyAdapter?.submitList(data)
                 academyAdapter?.notifyDataSetChanged()
-            }else{
-
             }
 
         })
@@ -69,6 +66,13 @@ class FavoriteMovieFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         rvCourse = view.findViewById<View>(R.id.rv_movies) as RecyclerView?
     }
+
+    private fun obtainViewModel(activity: FragmentActivity): FavoriteMovieViewModel {
+        // Use a Factory to inject dependencies into the ViewModel
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProviders.of(activity, factory).get(FavoriteMovieViewModel::class.java)
+    }
+
 
 
 }
