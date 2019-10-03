@@ -1,32 +1,25 @@
 package com.dedi.myapplication.detail
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.dedi.myapplication.R
+import com.dedi.myapplication.ViewModelFactory
 import com.dedi.myapplication.data.DetailModel
 import com.dedi.myapplication.data.FavModel
-import com.dedi.myapplication.data.MovieRespone
-import com.dedi.myapplication.data.entity.Movie
-import com.dedi.myapplication.data.entity.TvShow
-import com.dedi.myapplication.feature.movie.MoviesViewModel
+import com.dedi.myapplication.feature.tvshow.TvShowViewModel
 import com.dedi.myapplication.repository.ApiRepository
 import com.dedi.myapplication.utils.imageLoad
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.content_detail.*
-import com.dedi.myapplication.home.MainActivity
-
-
-
-
-
 
 
 class DetailActivity : AppCompatActivity() {
@@ -43,13 +36,7 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-
-        val factory = DetailViewModel.Factory(application, ApiRepository())
-        detailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel::class.java)
-
-
-
+        detailViewModel = obtainViewModel(this)
 
         txtTitleDetail.text = result.title
         txt_overview.text = result.overview
@@ -88,4 +75,9 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
+    private fun obtainViewModel(activity: AppCompatActivity): DetailViewModel {
+        // Use a Factory to inject dependencies into the ViewModel
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProviders.of(activity, factory).get(DetailViewModel::class.java)
+    }
 }

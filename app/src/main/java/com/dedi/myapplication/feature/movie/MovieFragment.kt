@@ -7,13 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dedi.myapplication.R
+import com.dedi.myapplication.ViewModelFactory
 import com.dedi.myapplication.adapter.MoviesAdapter
-import com.dedi.myapplication.data.entity.Movie
+import com.dedi.myapplication.feature.tvshow.TvShowViewModel
 import com.dedi.myapplication.repository.ApiRepository
 import kotlinx.android.synthetic.main.fragment_movie.*
 
@@ -48,11 +50,10 @@ class MovieFragment : Fragment() {
         activity?.title = "Movies"
         if (activity != null) {
             //untuk handle jika repository lebih dari 1
-            val factory = MoviesViewModel.Factory(activity!!.application, ApiRepository())
+            viewModel = obtainViewModel(activity as FragmentActivity)
             //end
             progressBar.visibility =View.VISIBLE
 
-            viewModel = ViewModelProviders.of(this, factory).get(MoviesViewModel::class.java)
             observeViewModelRequest(viewModel)
             academyAdapter = MoviesAdapter(activity!!)
 
@@ -66,11 +67,9 @@ class MovieFragment : Fragment() {
         // Update the list when the data changes
         viewModel.getMovies().observe(this, Observer {data ->
             progressBar.visibility =View.GONE
-            if (data != null){
+            if (data != null) {
                 academyAdapter?.setListMovies(data.results)
                 academyAdapter?.notifyDataSetChanged()
-            }else{
-
             }
 
         })
@@ -81,5 +80,10 @@ class MovieFragment : Fragment() {
         rvCourse = view.findViewById<View>(R.id.rv_movies) as RecyclerView?
     }
 
+    private fun obtainViewModel(activity: FragmentActivity): MoviesViewModel {
+        // Use a Factory to inject dependencies into the ViewModel
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProviders.of(activity, factory).get(MoviesViewModel::class.java)
+    }
 
 }

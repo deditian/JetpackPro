@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dedi.myapplication.R
+import com.dedi.myapplication.ViewModelFactory
 import com.dedi.myapplication.adapter.TvShowAdapter
 import com.dedi.myapplication.repository.ApiRepository
 
@@ -38,9 +40,8 @@ class TvShowFragment : Fragment() {
         activity?.title = "Tv Shows"
         if (activity != null) {
             //untuk handle jika repository lebih dari 1
-            val factory = TvShowViewModel.Factory(activity!!.application, ApiRepository())
-//            //end
-            viewModel = ViewModelProviders.of(this, factory).get(TvShowViewModel::class.java)
+            viewModel = obtainViewModel(activity as FragmentActivity)
+
             observeViewModelRequest(viewModel)
             academyAdapter = TvShowAdapter(activity!!)
 
@@ -57,8 +58,6 @@ class TvShowFragment : Fragment() {
             if (data != null){
                 academyAdapter?.setListTvShow(data.results)
                 academyAdapter?.notifyDataSetChanged()
-            }else{
-
             }
 
         })
@@ -71,5 +70,10 @@ class TvShowFragment : Fragment() {
         progressBar = view.findViewById<View>(R.id.progress_bar) as ProgressBar?
     }
 
+    private fun obtainViewModel(activity: FragmentActivity): TvShowViewModel {
+        // Use a Factory to inject dependencies into the ViewModel
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProviders.of(activity, factory).get(TvShowViewModel::class.java)
+    }
 
 }
