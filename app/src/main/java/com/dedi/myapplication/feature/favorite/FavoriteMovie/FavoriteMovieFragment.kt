@@ -7,41 +7,37 @@ import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dedi.myapplication.R
-import com.dedi.myapplication.adapter.MoviesAdapter
-import com.dedi.myapplication.adapter.ViewPagerAdapter
-import com.dedi.myapplication.feature.movie.MoviesViewModel
-import com.dedi.myapplication.repository.ApiRepository
-import kotlinx.android.synthetic.main.fragment_movie.*
+import com.dedi.myapplication.repository.LocalRepository
+import com.dedi.myapplication.room.FavDao
+import kotlinx.android.synthetic.main.fav_movie_fragment.*
+import org.koin.android.ext.android.inject
 
 class FavoriteMovieFragment : Fragment() {
     val TAG ="FavoriteMovieFragment"
     private var rvCourse: RecyclerView? = null
     private var academyAdapter: FavoriteMovieAdapter? = null
-    lateinit var viewModel: FavoriteMovieViewModel
+    val viewModel:FavoriteMovieViewModel by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movie, container, false)
+        return inflater.inflate(R.layout.fav_movie_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         if (activity != null) {
-            //untuk handle jika repository lebih dari 1
-            val factory = FavoriteMovieViewModel.Factory(activity!!.application, ApiRepository())
-            //end
-            progressBar.visibility =View.VISIBLE
 
-            viewModel = ViewModelProviders.of(this, factory).get(FavoriteMovieViewModel::class.java)
-            observeViewModelRequest(viewModel)
+            fav_progressBar.visibility =View.VISIBLE
+            observeViewModelRequest()
+
             academyAdapter = FavoriteMovieAdapter(activity!!)
 
             rvCourse?.layoutManager = LinearLayoutManager(context)
@@ -51,15 +47,13 @@ class FavoriteMovieFragment : Fragment() {
 
     }
 
-    private fun observeViewModelRequest(viewModel: FavoriteMovieViewModel) {
+    private fun observeViewModelRequest() {
         // Update the list when the data changes
-        viewModel.getFav().observe(this, Observer {data ->
-            progressBar.visibility =View.GONE
+        viewModel.getFavMovies("movie").observe(this, Observer {data ->
+            fav_progressBar.visibility =View.GONE
             if (data != null){
                 academyAdapter?.submitList(data)
                 academyAdapter?.notifyDataSetChanged()
-            }else{
-
             }
 
         })
@@ -67,7 +61,7 @@ class FavoriteMovieFragment : Fragment() {
 
     override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rvCourse = view.findViewById<View>(R.id.rv_movies) as RecyclerView?
+        rvCourse = view.findViewById<View>(R.id.rv_fav_movies) as RecyclerView?
     }
 
 

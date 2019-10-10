@@ -1,12 +1,20 @@
 package com.dedi.myapplication.feature.movie
 
 import android.app.Application
+import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.dedi.myapplication.data.MovieCatalogue
-import com.dedi.myapplication.repository.MovieRepository
-import com.dedi.myapplication.utils.DataDummy
+import com.dedi.myapplication.BuildConfig
+import com.dedi.myapplication.data.JsonDummyMovies
+
+import com.dedi.myapplication.data.MovieRespone
+import com.dedi.myapplication.data.entity.Movie
+import com.dedi.myapplication.repository.ApiCallback
+import com.dedi.myapplication.repository.ApiRepository
+
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -23,19 +31,23 @@ class MoviesViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val movieRepository = mock(MovieRepository::class.java)
-    private val application = mock(Application::class.java)
+    @Mock
+    lateinit var apiCallback : ApiCallback
 
     @Mock
-    lateinit var observer: Observer<ArrayList<MovieCatalogue>>
+    lateinit var observer: Observer<MovieRespone>
 
     @Mock
     private lateinit var viewmodel: MoviesViewModel
+    val data = JsonDummyMovies()
+    val gson = GsonBuilder().create()
+    var foinderlist = object : TypeToken<MovieRespone>() {}.type
+    val movie : MovieRespone = gson.fromJson(data.jdummymovie, foinderlist)
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        viewmodel = MoviesViewModel(application, movieRepository)
+        viewmodel = MoviesViewModel(apiCallback)
     }
 
 
@@ -43,7 +55,7 @@ class MoviesViewModelTest {
     fun getMovies() {
         val expected = generateDummy()
 
-        Mockito.`when`(movieRepository.getAllMovie()).thenReturn(expected)
+        Mockito.`when`(apiCallback.getMovies(BuildConfig.API_KEY)).thenReturn(expected)
         viewmodel.getMovies().observeForever(observer)
         verify(observer).onChanged(expected.value)
 
@@ -53,9 +65,9 @@ class MoviesViewModelTest {
 
     }
 
-    fun generateDummy(): MutableLiveData<ArrayList<MovieCatalogue>> {
-        val data = MutableLiveData<ArrayList<MovieCatalogue>>()
-        data.postValue(DataDummy.generateMovies())
+    fun generateDummy(): MutableLiveData<MovieRespone> {
+        val data = MutableLiveData<MovieRespone>()
+        data.postValue(movie)
         return data
     }
 }

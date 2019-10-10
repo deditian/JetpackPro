@@ -1,91 +1,99 @@
 package com.dedi.myapplication.detail
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.dedi.myapplication.R
 import com.dedi.myapplication.data.DetailModel
 import com.dedi.myapplication.data.FavModel
-import com.dedi.myapplication.data.MovieRespone
-import com.dedi.myapplication.data.entity.Movie
-import com.dedi.myapplication.data.entity.TvShow
-import com.dedi.myapplication.feature.movie.MoviesViewModel
-import com.dedi.myapplication.repository.ApiRepository
 import com.dedi.myapplication.utils.imageLoad
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.content_detail.*
-import com.dedi.myapplication.home.MainActivity
-
-
-
-
-
+import org.koin.android.ext.android.inject
 
 
 class DetailActivity : AppCompatActivity() {
 
+    private val viewModel: DetailViewModel by inject()
+    var pilih : Boolean = false
     val TAG = "DetailActivity"
-    private val result by lazy {
-            intent.getParcelableExtra<DetailModel>("movies")
+    private val list_data by lazy {
+        intent.getParcelableExtra<DetailModel>("list_data")
     }
 
-    lateinit var detailViewModel: DetailViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-
-        val factory = DetailViewModel.Factory(application, ApiRepository())
-        detailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel::class.java)
-
-
-
-
-        txtTitleDetail.text = result.title
-        txt_overview.text = result.overview
-        img_Poster_Detail.imageLoad(result.Image)
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menufavorite, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-
-        when (item?.itemId) {
-            R.id.menu_favorite -> observeViewModelRequest(detailViewModel,FavModel(result.id,result.title,result.Image,result.overview))
-
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-
-
-
-
-    private fun observeViewModelRequest(detailViewModel: DetailViewModel,favModel: FavModel) {
-        detailViewModel.saveFav(favModel).observe(this, Observer { data ->
-            if (data != null) {
-                Log.i(TAG,"datanya = $data")
-                Toasty.success(applicationContext, "Save Success", Toast.LENGTH_SHORT).show()
+        setFavorite(pilih)
+        viewModel.getFavMovies(list_data.id).observe(this, Observer {
+            Log.i(TAG, "isi dari getFavMovies $it")
+            if (it.isNotEmpty()) {
+                    setFavorite(true)
+                    pilih =false
             }else{
-                Toasty.error(applicationContext, "Failed Save", Toast.LENGTH_SHORT).show()
+                setFavorite(false)
+                pilih = true
             }
-            }
-        )
+        })
 
+        list_data.let {
+            txtTitleDetail.text = it.title
+            txt_overview.text = it.overview
+            img_Poster_Detail.imageLoad(it.Image)
+        }
+
+
+
+        floatingActionButton.setOnClickListener {
+           actionclick()
+        }
     }
+
+    private fun actionclick( ) {
+        var data = list_data.status
+        if (pilih){
+            if (data == "movie"){
+            Log.i(TAG, "atas")
+            viewModel.saveFav(FavModel(
+                list_data.id,list_data.title,list_data.Image,list_data.overview,"movie"
+            ))}else{
+                viewModel.saveFav(FavModel(
+                    list_data.id,list_data.title,list_data.Image,list_data.overview,"tv_show"))
+            }
+            setFavorite(true)
+            Toasty.success(this, "Save", Toasty.LENGTH_SHORT).show()
+        }else{
+            if (data == "movie"){
+                Log.i(TAG, "bawah")
+                viewModel.deleteFav(FavModel(
+                    list_data.id,list_data.title,list_data.Image,list_data.overview,"movie"
+                ))
+            }else{
+                viewModel.deleteFav(FavModel(
+                    list_data.id,list_data.title,list_data.Image,list_data.overview,"tv_show"
+                ))
+            }
+            setFavorite(false)
+            Toasty.success(this, "Delete", Toasty.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setFavorite(boolean: Boolean) {
+        if (boolean) {
+            floatingActionButton.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_black_24dp))
+
+        } else {
+            floatingActionButton.setImageDrawable(resources.getDrawable(R.drawable.ic_unfavorite_border_black_24dp))
+        }
+    }
+
+
 
 }

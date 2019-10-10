@@ -5,9 +5,12 @@ import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.dedi.myapplication.data.MovieCatalogue
-import com.dedi.myapplication.repository.TvShowRepository
-import com.dedi.myapplication.utils.DataDummy
+import com.dedi.myapplication.BuildConfig
+import com.dedi.myapplication.data.JsonDummyMovies
+import com.dedi.myapplication.data.TvShowRespone
+import com.dedi.myapplication.repository.ApiCallback
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -24,27 +27,30 @@ class TvShowViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val tvShowRepository = mock(TvShowRepository::class.java)
-    private val application = mock(Application::class.java)
+    @Mock
+    lateinit var apiCallback : ApiCallback
 
     @Mock
-    lateinit var observer: Observer<ArrayList<MovieCatalogue>>
+    lateinit var observer: Observer<TvShowRespone>
 
     @Mock
     private lateinit var viewmodel: TvShowViewModel
+    val data = JsonDummyMovies()
+    val gson = GsonBuilder().create()
+    var foinderlist = object : TypeToken<TvShowRespone>() {}.type
+    val tvshow : TvShowRespone = gson.fromJson(data.jdummymovie, foinderlist)
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        viewmodel = TvShowViewModel(application, tvShowRepository)
+        viewmodel = TvShowViewModel(apiCallback)
     }
-
 
     @Test
     fun getTvShows() {
         val expected = generateDummy()
 
-        Mockito.`when`(tvShowRepository.getAllTvShow()).thenReturn(expected)
+        Mockito.`when`(apiCallback.getTvShows(BuildConfig.API_KEY)).thenReturn(expected)
         viewmodel.getTvShow().observeForever(observer)
         verify(observer).onChanged(expected.value)
 
@@ -54,9 +60,9 @@ class TvShowViewModelTest {
 
     }
 
-    fun generateDummy(): MutableLiveData<ArrayList<MovieCatalogue>> {
-        val data = MutableLiveData<ArrayList<MovieCatalogue>>()
-        data.postValue(DataDummy.generateTvShows())
+    fun generateDummy(): MutableLiveData<TvShowRespone> {
+        val data = MutableLiveData<TvShowRespone>()
+        data.postValue(tvshow)
         return data
     }
 }

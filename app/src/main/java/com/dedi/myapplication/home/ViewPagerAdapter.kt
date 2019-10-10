@@ -1,4 +1,4 @@
-package com.dedi.myapplication.adapter
+package com.dedi.myapplication.home
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

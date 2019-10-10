@@ -1,4 +1,4 @@
-package com.dedi.myapplication.feature.favorite.FavoriteMovie
+package com.dedi.myapplication.feature.favorite.FavoriteTvShow
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -16,8 +16,8 @@ import com.dedi.myapplication.utils.imageLoad
 import kotlinx.android.synthetic.main.item_content.view.*
 
 
-class FavoriteMovieAdapter(activity: FragmentActivity) :
-    PagedListAdapter<FavModel, FavoriteMovieAdapter.FavMoviesViewHolder>(DIFF_CALLBACK) {
+class FavoriteTvShowAdapter(activity: FragmentActivity) :
+    PagedListAdapter<FavModel, FavoriteTvShowAdapter.FavTvShowViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<FavModel>() {
@@ -34,24 +34,24 @@ class FavoriteMovieAdapter(activity: FragmentActivity) :
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavMoviesViewHolder {
-        return FavMoviesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavTvShowViewHolder {
+        return FavTvShowViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false))
     }
 
 
-    override fun onBindViewHolder(holder: FavMoviesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavTvShowViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
 
-    inner class FavMoviesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class FavTvShowViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(results: FavModel?) = itemView.run {
             txt_title.text = results?.titlefav
             img_poster.imageLoad(results?.imagefav!!)
             cv_item_course.setOnClickListener {
                 val mIntent = Intent(context, DetailActivity::class.java).apply {
                     putExtra("list_data",
-                        DetailModel(results.idfav,results.titlefav,results.imagefav,results.overviewfav,"movie")
+                        DetailModel(results.idfav,results.titlefav,results.imagefav,results.overviewfav,"tv_show")
                     )
                 }
                 context.startActivity(mIntent)

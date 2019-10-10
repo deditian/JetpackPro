@@ -1,18 +1,19 @@
 package com.dedi.myapplication.data
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-@Entity(tableName = "fav")
+@Parcelize
+@Entity(tableName = "favorite_table")
 data class FavModel(
-    val id: Int,
-    @PrimaryKey
-    val titlefav: String,
-    val imagefav: String,
-    val overviewfav: String
-){
+    @PrimaryKey  @field:SerializedName("id") val idfav: Int,
+    @field:SerializedName("titlefav") val titlefav: String,
+    @field:SerializedName("imagefav") val imagefav: String,
+    @field:SerializedName("overviewfav") val overviewfav: String,
+    @field:SerializedName("statusfav") val statusfav: String
 
-    @Ignore
-    constructor() : this(0, "", "", "")
-}
+):Parcelable

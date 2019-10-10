@@ -16,5 +16,6 @@ data class DetailModel(
     val id : Int,
     val title : String,
     val Image: String,
-    val overview : String
+    val overview : String,
+    val status : String
 ):Parcelable

@@ -1,16 +1,13 @@
-package com.dedi.myapplication.adapter
+package com.dedi.myapplication.feature.movie
 
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.dedi.myapplication.R
 import com.dedi.myapplication.data.DetailModel
-import com.dedi.myapplication.data.MovieRespone
 
 import com.dedi.myapplication.data.entity.Movie
 import com.dedi.myapplication.detail.DetailActivity
@@ -43,8 +40,8 @@ class MoviesAdapter(activity: FragmentActivity) : RecyclerView.Adapter<MoviesAda
             img_poster.imageLoad(results.poster_path)
             cv_item_course.setOnClickListener {
                 val mIntent = Intent(context, DetailActivity::class.java).apply {
-                    putExtra("movies",
-                        DetailModel(results.id,results.original_title,results.poster_path,results.overview))
+                    putExtra("list_data",
+                        DetailModel(results.id,results.original_title,results.poster_path,results.overview,"movie"))
                 }
                 context.startActivity(mIntent)
             }
