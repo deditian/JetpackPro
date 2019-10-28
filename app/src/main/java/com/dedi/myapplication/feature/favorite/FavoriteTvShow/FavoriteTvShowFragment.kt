@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dedi.myapplication.R
@@ -40,7 +41,7 @@ class FavoriteTvShowFragment : Fragment() {
 
             academyAdapter = FavoriteTvShowAdapter(activity!!)
 
-            rvCourse?.layoutManager = LinearLayoutManager(context)
+            rvCourse?.layoutManager =  GridLayoutManager(context,2)
             rvCourse?.setHasFixedSize(true)
             rvCourse?.adapter = academyAdapter
         }

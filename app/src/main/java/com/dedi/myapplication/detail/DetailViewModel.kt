@@ -20,7 +20,6 @@ class DetailViewModel (val localCallback: LocalCallback) : ViewModel(){
         localCallback.delete(favModel)
     }
 
-
     fun getFavMovies(id : Int): LiveData<PagedList<FavModel>> {
         val pagedListConfig = PagedList.Config.Builder()
             .setEnablePlaceholders(false)
