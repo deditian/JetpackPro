@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="com.dedi.myapplication">
+          xmlns:tools="http://schemas.android.com/tools" package="com.dedi.movies">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
@@ -11,21 +11,21 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning"
-            android:name=".di.MyApp"
+            android:name="com.dedi.movies.di.MyApp"
     >
 
 
         <activity
-                android:name=".detail.DetailActivity"
+                android:name="com.dedi.movies.detail.DetailActivity"
                 android:label="@string/title_activity_detail"
-                android:parentActivityName=".home.MainActivity"
+                android:parentActivityName="com.dedi.movies.home.MainActivity"
                 android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="com.dedi.myapplication.home.MainActivity"/>
+                    android:value="com.dedi.movies.home.MainActivity"/>
         </activity>
 
-        <activity android:name=".home.MainActivity"
+        <activity android:name="com.dedi.movies.home.MainActivity"
                   android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

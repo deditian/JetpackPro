@@ -2,11 +2,11 @@
 <manifest
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        package="com.dedi.myapplication">
+        package="com.dedi.movies">
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.dedi.myapplication.testing.SingleFragmentActivity"/>
+        <activity android:name="com.dedi.movies.testing.SingleFragmentActivity"/>
     </application>
 
 </manifest>
