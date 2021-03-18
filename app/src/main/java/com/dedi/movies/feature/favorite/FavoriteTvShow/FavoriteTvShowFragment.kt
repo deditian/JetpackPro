@@ -10,21 +10,29 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dedi.movies.R
+import com.dedi.movies.databinding.FragmentMovieBinding
+import com.dedi.movies.databinding.FragmentTvShowBinding
 import org.koin.android.ext.android.inject
 
 class FavoriteTvShowFragment : Fragment() {
 
     val TAG ="FavoriteMovieFragment"
-    private var rvCourse: RecyclerView? = null
     private var academyAdapter: FavoriteTvShowAdapter? = null
     val viewModel:FavoriteTvShowViewModel by inject()
+
+    private var _binding: FragmentTvShowBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentTvShowBinding.inflate(inflater, container, false)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fav_tv_show_fragment, container, false)
+        return binding.root
     }
 
 
@@ -36,11 +44,11 @@ class FavoriteTvShowFragment : Fragment() {
 //            fav_progressBar.visibility =View.VISIBLE
             observeViewModelRequest()
 
-            academyAdapter = FavoriteTvShowAdapter(activity!!)
+            academyAdapter = FavoriteTvShowAdapter()
 
-            rvCourse?.layoutManager =  GridLayoutManager(context,2)
-            rvCourse?.setHasFixedSize(true)
-            rvCourse?.adapter = academyAdapter
+            binding.rvTvShow.layoutManager =  GridLayoutManager(context,2)
+            binding.rvTvShow.setHasFixedSize(true)
+            binding.rvTvShow.adapter = academyAdapter
         }
 
     }
@@ -57,8 +65,9 @@ class FavoriteTvShowFragment : Fragment() {
         })
     }
 
-    override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        rvCourse = view.findViewById<View>(R.id.rv_fav_tv_show) as RecyclerView?
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
+
 }

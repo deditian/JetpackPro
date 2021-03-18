@@ -10,35 +10,39 @@ import com.dedi.movies.R
 import com.dedi.movies.data.DetailModel
 
 import com.dedi.movies.data.entity.Movie
+import com.dedi.movies.databinding.FragmentMovieBinding
+import com.dedi.movies.databinding.ItemContentBinding
 import com.dedi.movies.detail.DetailActivity
 import com.dedi.movies.utils.imageLoad
 import kotlinx.android.synthetic.main.item_content.view.*
 
-class MoviesAdapter(activity: FragmentActivity) : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
-    private val mCourses = ArrayList<Movie>()
+class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
+    private val mMovies = ArrayList<Movie>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
-        return MoviesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false))
+        val  binding = ItemContentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MoviesViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-        return mCourses.size
+        return mMovies.size
     }
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
-        holder.bind(mCourses[position])
+        holder.bind(mMovies[position])
     }
 
-    fun setListMovies(listCourses: List<Movie>) {
+    fun setListMovies(listCourses: List<Movie>?) {
         if (listCourses == null) return
-        this.mCourses.clear()
-        this.mCourses.addAll(listCourses)
+        this.mMovies.clear()
+        this.mMovies.addAll(listCourses)
     }
 
-    inner class MoviesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class MoviesViewHolder(private val itemBinding: ItemContentBinding) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(results: Movie) = itemView.run {
-            txt_title.text = results.original_title
-            img_poster.imageLoad(results.poster_path)
-            cv_item_course.setOnClickListener {
+            itemBinding.txtTitle.text = results.original_title
+            itemBinding.imgPoster.imageLoad(results.poster_path)
+            itemBinding.cvItemCourse.setOnClickListener {
                 val mIntent = Intent(context, DetailActivity::class.java).apply {
                     putExtra("list_data",
                         DetailModel(results.id,results.original_title,results.poster_path,results.overview,"movie"))

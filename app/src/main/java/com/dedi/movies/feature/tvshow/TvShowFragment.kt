@@ -12,23 +12,32 @@ import androidx.recyclerview.widget.GridLayoutManager
 
 import androidx.recyclerview.widget.RecyclerView
 import com.dedi.movies.R
+import com.dedi.movies.databinding.FragmentMovieBinding
+import com.dedi.movies.databinding.FragmentTvShowBinding
 import kotlinx.android.synthetic.main.fragment_tv_show.*
+import kotlinx.android.synthetic.main.fragment_tv_show.view.*
 import org.koin.android.ext.android.inject
 
 
 class TvShowFragment : Fragment() {
 
-    private var rvCourse: RecyclerView? = null
     private val viewModel: TvShowViewModel by inject()
     private var academyAdapter: TvShowAdapter? = null
+
+    private var _binding: FragmentTvShowBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentTvShowBinding.inflate(inflater, container, false)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tv_show, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -38,18 +47,18 @@ class TvShowFragment : Fragment() {
             //untuk handle jika repository lebih dari 1
 
             observeViewModelRequest(viewModel)
-            academyAdapter = TvShowAdapter(activity!!)
+            academyAdapter = TvShowAdapter()
 
-            rvCourse?.layoutManager = GridLayoutManager(context,2)
-            rvCourse?.setHasFixedSize(true)
-            rvCourse?.adapter = academyAdapter
+            binding.rvTvShow.layoutManager = GridLayoutManager(context,2)
+            binding.rvTvShow.setHasFixedSize(true)
+            binding.rvTvShow.adapter = academyAdapter
         }
     }
 
     private fun observeViewModelRequest(viewModel: TvShowViewModel) {
         // Update the list when the data changes
         viewModel.getTvShow().observe(this, Observer {data ->
-            progress_bar?.visibility =View.GONE
+            binding.progressBar.visibility = View.GONE
             if (data != null){
                 academyAdapter?.setListTvShow(data.results)
                 academyAdapter?.notifyDataSetChanged()
@@ -60,11 +69,9 @@ class TvShowFragment : Fragment() {
         })
     }
 
-
-    override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        rvCourse = view.findViewById<View>(R.id.rv_tv_show) as RecyclerView?
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
-
 
 }

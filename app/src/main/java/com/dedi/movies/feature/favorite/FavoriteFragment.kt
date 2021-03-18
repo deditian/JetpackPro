@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dedi.movies.R
+import com.dedi.movies.databinding.FragmentFavoriteBinding
+import com.dedi.movies.databinding.FragmentTvShowBinding
 import com.dedi.movies.home.ViewPagerAdapter
 import com.dedi.movies.feature.favorite.FavoriteMovie.FavoriteMovieFragment
 import com.dedi.movies.feature.favorite.FavoriteTvShow.FavoriteTvShowFragment
@@ -14,12 +16,19 @@ import kotlinx.android.synthetic.main.fragment_favorite.*
 
 class FavoriteFragment : Fragment() {
 
+    private var _binding: FragmentFavoriteBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -29,8 +38,8 @@ class FavoriteFragment : Fragment() {
             addFragment(FavoriteMovieFragment(), "Movies")
             addFragment(FavoriteTvShowFragment(), "Tv Shows")
         }
-        viewPager.adapter = adapter
-        tabs.setupWithViewPager(viewPager)
+        binding.viewPager.adapter = adapter
+        binding.tabs.setupWithViewPager(viewPager)
     }
 
 

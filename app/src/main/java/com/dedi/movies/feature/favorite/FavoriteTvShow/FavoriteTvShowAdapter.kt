@@ -16,8 +16,7 @@ import com.dedi.movies.utils.imageLoad
 import kotlinx.android.synthetic.main.item_content.view.*
 
 
-class FavoriteTvShowAdapter(activity: FragmentActivity) :
-    PagedListAdapter<FavModel, FavoriteTvShowAdapter.FavTvShowViewHolder>(DIFF_CALLBACK) {
+class FavoriteTvShowAdapter : PagedListAdapter<FavModel, FavoriteTvShowAdapter.FavTvShowViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<FavModel>() {

@@ -23,18 +23,4 @@ class SingleFragmentActivity : AppCompatActivity() {
 
         setContentView(content)
     }
-
-    fun setFragment(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-//            .add(R.id.viewPager, fragment, "TEST")
-            .commit()
-    }
-
-    fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-//            .add(R.id.viewPager, fragment)
-            .commit()
-    }
 }

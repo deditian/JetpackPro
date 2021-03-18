@@ -8,7 +8,7 @@ import com.dedi.movies.data.FavModel
 import com.dedi.movies.repository.LocalCallback
 
 
-class FavoriteMovieViewModel (val localCallback: LocalCallback):ViewModel(){
+class FavoriteMovieViewModel (private val localCallback: LocalCallback):ViewModel(){
 
     fun getFavMovies(status:String): LiveData<PagedList<FavModel>> {
         val pagedListConfig = PagedList.Config.Builder()

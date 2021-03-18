@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dedi.movies.R
+import com.dedi.movies.databinding.FragmentMovieBinding
 import kotlinx.android.synthetic.main.fragment_movie.*
 import org.koin.android.ext.android.inject
 
@@ -19,18 +20,23 @@ import org.koin.android.ext.android.inject
 
 class MovieFragment : Fragment() {
     val TAG ="MovieFragment"
-    private var rvCourse: RecyclerView? = null
     private var academyAdapter: MoviesAdapter? = null
     private val viewModel: MoviesViewModel by inject()
 
+    private var _binding: FragmentMovieBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentMovieBinding.inflate(inflater, container, false)
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_movie, container, false)
+        return binding.root
     }
 
 
@@ -40,11 +46,11 @@ class MovieFragment : Fragment() {
         if (activity != null) {
             progressBar.visibility =View.VISIBLE
             observeViewModelRequest()
-            academyAdapter = MoviesAdapter(activity!!)
+            academyAdapter = MoviesAdapter()
 
-            rvCourse?.layoutManager = LinearLayoutManager(context)
-            rvCourse?.setHasFixedSize(true)
-            rvCourse?.adapter = academyAdapter
+            binding.rvMovies.layoutManager = LinearLayoutManager(context)
+            binding.rvMovies.setHasFixedSize(true)
+            binding.rvMovies.adapter = academyAdapter
         }
     }
 
@@ -62,9 +68,9 @@ class MovieFragment : Fragment() {
         })
     }
 
-    override fun onViewCreated(view: View, @Nullable savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        rvCourse = view.findViewById<View>(R.id.rv_movies) as RecyclerView?
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 

@@ -3,6 +3,8 @@ package com.dedi.movies.detail
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import com.dedi.movies.R
 import com.dedi.movies.data.DetailModel
@@ -86,10 +88,10 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setFavorite(boolean: Boolean) {
         if (boolean) {
-            floatingActionButton.setImageDrawable(resources.getDrawable(R.drawable.ic_favorite_black_24dp))
+            floatingActionButton.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.ic_favorite_black_24dp))
 
         } else {
-            floatingActionButton.setImageDrawable(resources.getDrawable(R.drawable.ic_unfavorite_border_black_24dp))
+            floatingActionButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_unfavorite_border_black_24dp))
         }
     }
 
